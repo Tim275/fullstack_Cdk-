@@ -1,7 +1,9 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import * as cognito from "@aws-sdk/client-cognito-identity-provider";
 
 const cognitoClient = new cognito.CognitoIdentityProviderClient({
-  region: "ap-south-1",
+  region: "eu-central-1",
 });
 
 export const a_user_signs_up = async (
@@ -15,18 +17,18 @@ export const a_user_signs_up = async (
   console.log(`[${email}] --> Signing up`);
 
   const command = new cognito.SignUpCommand({
-    ClientId: clientId, // Required
-    Username: username, // Required
-    Password: password, // Required
+    ClientId: clientId,
+    Username: username,
+    Password: password,
     UserAttributes: [
+      { Name: "email", Value: email },
       { Name: "name", Value: name },
-      // Add any other required attributes here
     ],
   });
 
-  const signUpResponse = await cognitoClient.send(command);
-  const userSub = signUpResponse.UserSub;
-  const adminCommand: cognito.AdminGetUserCommandInput = {
+  const singUpResponse = await cognitoClient.send(command);
+  const userSub = singUpResponse.UserSub;
+  const adminCommand: cognito.AdminConfirmSignUpCommandInput = {
     Username: userSub as string,
     UserPoolId: userPoolId as string,
   };

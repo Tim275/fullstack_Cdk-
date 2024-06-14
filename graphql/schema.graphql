@@ -1,0 +1,45 @@
+# Definiert einen Benutzertyp mit einer ID, einem Namen und einer E-Mail. Alle Felder sind nicht nullbar.
+type User {
+  id: ID!
+  name: String!
+  email: String!
+}
+
+# Definiert einen Todo-Typ mit einer einzigartigen TodoID, einer UserID, um das Todo einem Benutzer zuzuordnen,
+# einem Titel für das Todo und einem abgeschlossenen Status, um anzuzeigen, ob das Todo erledigt ist.
+type Todo {
+  TodoID: ID!
+  UserID: ID!
+  title: String!
+  completed: Boolean!
+}
+
+# Eingabetyp für das Erstellen eines neuen Todos. Erfordert eine UserID und einen Titel.
+input CreateTodoInput {
+  UserID: ID!
+  title: String!
+}
+
+# Eingabetyp für die Aktualisierung eines vorhandenen Todos. Erfordert eine UserID und erlaubt einen optionalen Titel.
+input UpdateTodoInput {
+  UserID: ID!
+  title: String
+}
+
+# Eingabetyp für das Löschen eines Todos. Erfordert eine UserID und einen Titel.
+input DeleteTodoInput {
+  UserID: ID!
+  title: String!
+}
+
+# Mutationstyp, der Operationen zum Erstellen, Aktualisieren und Löschen von Todos definiert.
+type Mutation {
+  createTodo(input: CreateTodoInput!): Todo
+  updateTodo(input: UpdateTodoInput!): Boolean
+  deleteTodo(input: DeleteTodoInput!): Boolean
+}
+
+# Abfragetyp für das Auflisten von Todos nach einer spezifischen UserID.
+type Query {
+  listTodos(UserID: ID!): [Todo]
+}

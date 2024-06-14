@@ -8,10 +8,12 @@ import * as cdk from "aws-cdk-lib";
 export class DataStack extends cdk.Stack {
 
     public readonly usersTable: Table;
+    public readonly todosTable: Table;
 
     constructor(scope: Construct, id: string, props?: StackProps) {
         super(scope, id, props);
         const suffix = getSuffixFromStack(this);
+
 // für die Userregistrierung
         this.usersTable = new Table(this, 'UsersTable', {
             partitionKey: { 
@@ -22,5 +24,32 @@ export class DataStack extends cdk.Stack {
       billingMode: BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
         });
-    }
-}
+               // table für die todos
+        this.todosTable = new Table(this, "TodosTable", {
+            tableName: "Todos",
+            partitionKey: {
+              name: "UserID",
+              type: AttributeType.STRING,
+            },
+            sortKey: {
+              name: "TodoID",
+              type: AttributeType.STRING,
+            },
+            billingMode: BillingMode.PAY_PER_REQUEST,
+            removalPolicy: cdk.RemovalPolicy.DESTROY,
+          });
+          this.todosTable.addGlobalSecondaryIndex({
+            indexName: "getTodoId",
+            partitionKey: {
+              name: "UserID",
+              type: AttributeType.STRING,
+            },
+            sortKey: {
+              name: "title",
+              type: AttributeType.STRING,
+            },
+          });
+        }
+      }
+
+    

@@ -11,16 +11,20 @@ import { join } from "path";
 
 interface LambdaStackProps extends cdk.StackProps {
   usersTable: Table;
+  todosTable: Table;
  
 }
 
 export class LambdaStack extends cdk.Stack {
 
   public readonly addUserToTableFunc: NodejsFunction;
+  // app sync
+  public readonly createTodoFunc: NodejsFunction;
 
   constructor(scope: Construct, id: string, props: LambdaStackProps) {
     super(scope, id, props);
     this.addUserToTableFunc = this.addUserToUsersTable(props);
+    this.createTodoFunc = this.createTodoFunction(props);
   }
 
   addUserToUsersTable(props: LambdaStackProps) {
@@ -35,6 +39,22 @@ export class LambdaStack extends cdk.Stack {
       new iam.PolicyStatement({
         actions: ["dynamodb:PutItem"],
         resources: [props.usersTable.tableArn as string],
+      })
+    );
+    return func;
+  }
+
+  createTodoFunction(props: LambdaStackProps) {
+    const func = new NodejsFunction(this, "createTodoFunc", {
+      functionName: "createTodoFunc",
+      runtime: Runtime.NODEJS_20_X,
+      handler: "handler",
+      entry: path.join(__dirname, "../../AppsyncFunctions/createTodo/index.ts"),
+    });
+    func.addToRolePolicy(
+      new iam.PolicyStatement({
+        actions: ["dynamodb:PutItem"],
+        resources: [props.todosTable.tableArn as string],
       })
     );
     return func;
