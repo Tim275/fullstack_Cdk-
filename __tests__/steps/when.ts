@@ -1,9 +1,20 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import * as cognito from "@aws-sdk/client-cognito-identity-provider";
+//import { makeGraphQLRequest } from "../utils";
 
+interface CreateTodoInput {
+  UserID: string;
+  title: string;
+}
+interface CreateTodoResponse {
+  TodoID: string;
+  UserID: string;
+  title: string;
+  completed: boolean;
+}
 const cognitoClient = new cognito.CognitoIdentityProviderClient({
-  region: "eu-central-1",
+  region: "ap-south-1",
 });
 
 export const a_user_signs_up = async (
@@ -14,27 +25,22 @@ export const a_user_signs_up = async (
   const userPoolId = process.env.ID_USER_POOL;
   const clientId = process.env.CLIENT_USER_POOL_ID;
   const username = email;
-  console.log(`[${email}] --> Signing up`);
-
+  console.log(` [${email}] --> Signing up`);
   const command = new cognito.SignUpCommand({
     ClientId: clientId,
     Username: username,
     Password: password,
-    UserAttributes: [
-      { Name: "email", Value: email },
-      { Name: "name", Value: name },
-    ],
+    UserAttributes: [{ Name: "name", Value: name }],
   });
-
   const singUpResponse = await cognitoClient.send(command);
   const userSub = singUpResponse.UserSub;
-  const adminCommand: cognito.AdminConfirmSignUpCommandInput = {
+  const adminCommond: cognito.AdminGetUserCommandInput = {
     Username: userSub as string,
     UserPoolId: userPoolId as string,
   };
-
-  await cognitoClient.send(new cognito.AdminConfirmSignUpCommand(adminCommand));
-  console.log(`[${email}] --> Confirmed Sign Up`);
+  await cognitoClient.send(new cognito.AdminConfirmSignUpCommand(adminCommond));
+  console.log(`[${email}] --> Confirmed SignUp Up`);
 
   return userSub as string;
 };
+

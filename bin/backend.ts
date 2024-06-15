@@ -22,4 +22,7 @@ const authStack = new AuthStack(app, "AuthStack", {
 const appsyncStack = new AppsyncStack(app, "AppsyncStack", {
     userPool: authStack.todoUserPool,
     createTodoFunc: lambdaStack.createTodoFunc,
+    listTodoFunc: lambdaStack.listTodoFunc,
+    deleteTodoFunc: lambdaStack.deleteTodoFunc,
+    updateTodoFunc: lambdaStack.updateTodoFunc,
 });
