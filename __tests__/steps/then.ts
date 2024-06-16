@@ -2,7 +2,7 @@ import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 
 const ddbClient = new DynamoDBClient({
-  region: "ap-south-1",
+  region: "eu-central-1",
 });
 export const user_exists_in_UsersTable = async (
   userSub: string

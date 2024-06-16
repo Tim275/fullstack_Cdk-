@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import * as cognito from "@aws-sdk/client-cognito-identity-provider";
-//import { makeGraphQLRequest } from "../utils";
+//import { makeRestRequest } from "../utils";
 
 interface CreateTodoInput {
   UserID: string;
@@ -14,7 +14,7 @@ interface CreateTodoResponse {
   completed: boolean;
 }
 const cognitoClient = new cognito.CognitoIdentityProviderClient({
-  region: "ap-south-1",
+  region: "eu-central-1",
 });
 
 export const a_user_signs_up = async (
@@ -43,4 +43,14 @@ export const a_user_signs_up = async (
 
   return userSub as string;
 };
+
+export const user_creates_a_todo = async (
+  user: any,
+  todoData: CreateTodoInput
+): Promise<CreateTodoResponse> => {
+ 
+  console.error("GraphQL request functionality is currently unavailable.");
+  throw new Error("GraphQL request functionality is currently unavailable.");
+};
+
 

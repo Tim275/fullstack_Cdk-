@@ -6,6 +6,7 @@ import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import { Construct } from "constructs";
 import path = require("path");
 import { join } from "path";
+import { Lambda } from "aws-cdk-lib/aws-ses-actions";
 
 
 
@@ -24,7 +25,11 @@ export class LambdaStack extends cdk.Stack {
  public readonly deleteTodoFunc: NodejsFunction;
  public readonly updateTodoFunc: NodejsFunction;
 
-
+ // ApiGateway Lambda Functions
+ public readonly getTodoFuction: NodejsFunction;
+ public readonly putTodoFunction: NodejsFunction;
+ public readonly updateTodoRESTFunction: NodejsFunction;
+ public readonly deleteTodoRESTFunction: NodejsFunction;
 
  
   constructor(scope: Construct, id: string, props: LambdaStackProps) {
@@ -34,6 +39,15 @@ export class LambdaStack extends cdk.Stack {
     this.listTodoFunc = this.listTodoFunction(props);
     this.deleteTodoFunc = this.deleteTodoFunction(props);
     this.updateTodoFunc = this.updateTodoFunction(props);
+
+    // ApiGateway Lambda Functions
+    this.getTodoFuction = this.GetTodoFunction(props);
+    this.putTodoFunction = this.PutTodoFunction(props);
+    this.updateTodoRESTFunction = this.UpdateTodoFunction(props);
+    this.deleteTodoRESTFunction = this.DeleteTodoFunction(props);
+
+
+
   }
 
   addUserToUsersTable(props: LambdaStackProps) {
@@ -123,9 +137,79 @@ export class LambdaStack extends cdk.Stack {
     return func;
   }
 
+  //// Apigateway
+  GetTodoFunction(props: LambdaStackProps) {
+    const func = new NodejsFunction(this, "GetTodosFunc", {
+      functionName: "GetTodosFunc",
+      runtime: Runtime.NODEJS_20_X,
+      handler: "handler",
+      entry: path.join(__dirname, "../../APIGatewayFunctions/GetTodos/index.ts"),
+    });
+    func.addToRolePolicy(
+      new iam.PolicyStatement({
+        actions: ["dynamodb:Query"],
+        resources: [props.todosTable.tableArn as string],
+      })
+    );
+    return func;
+  }
+  PutTodoFunction(props: LambdaStackProps) {
+    const func = new NodejsFunction(this, "PutTodoFunc", {
+      functionName: "PutTodoFunc",
+      runtime: Runtime.NODEJS_20_X,
+      handler: "handler",
+      entry: path.join(__dirname, "../../APIGatewayFunctions/PutTodo/index.ts"),
+    });
+    func.addToRolePolicy(
+      new iam.PolicyStatement({
+        actions: ["dynamodb:PutItem"],
+        resources: [props.todosTable.tableArn as string],
+      })
+    );
+    return func;
+  }
+  UpdateTodoFunction(props: LambdaStackProps) {
+    const func = new NodejsFunction(this, "updateTodoRestFunc", {
+      functionName: "updateTodoRestFunc",
+      runtime: Runtime.NODEJS_20_X,
+      handler: "handler",
+      entry: path.join(__dirname, "../../APIGatewayFunctions/updateTodo/index.ts"),
+    });
 
+    func.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["dynamodb:UpdateItem", "dynamodb:Query"],
+        resources: [
+          props.todosTable.tableArn,
+          props.todosTable.tableArn + "/index/getTodoId",
+        ],
+      })
+    );
 
-}
+    return func;
+  }
+  DeleteTodoFunction(props: LambdaStackProps) {
+    const func = new NodejsFunction(this, "deleteTodoRestFunc", {
+      functionName: "deleteTodoRestFunc",
+      runtime: Runtime.NODEJS_20_X,
+      handler: "handler",
+      entry: path.join(__dirname, "../../AppsyncFunctions/deleteTodo/index.ts"),
+    });
+
+    func.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["dynamodb:DeleteItem", "dynamodb:Query"],
+        resources: [
+          props.todosTable.tableArn,
+          props.todosTable.tableArn + "/index/getTodoId",
+        ],
+      })
+    );
+
+    return func;
+  }}
 
 
 

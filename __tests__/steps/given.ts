@@ -4,7 +4,7 @@ import * as dotenv from "dotenv";
 const chance = new Chance();
 dotenv.config();
 const cognitoClient = new cognito.CognitoIdentityProviderClient({
-  region: "ap-south-1",
+  region: "eu-central-1",
 });
 export const a_random_user = () => {
   const firstName = chance.first({ nationality: "en" });

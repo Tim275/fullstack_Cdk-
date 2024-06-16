@@ -6,6 +6,7 @@ import { DataStack } from '../infra/stacks/Datastack';
 import { LambdaStack } from '../infra/stacks/Lambdastack'; // its aws cognito
 import { AuthStack } from '../infra/stacks/auth-stack';
 import { AppsyncStack } from '../infra/stacks/appsync-stack';
+import { ApiGatewayStack } from '../infra/stacks/apigateway-stack';
 
 const app = new cdk.App();
 const databasestack = new DataStack(app, 'Databasestack');
@@ -26,3 +27,12 @@ const appsyncStack = new AppsyncStack(app, "AppsyncStack", {
     deleteTodoFunc: lambdaStack.deleteTodoFunc,
     updateTodoFunc: lambdaStack.updateTodoFunc,
 });
+
+const apiGateWayStack = new ApiGatewayStack(app, "ApiGateWayStack", {
+    userPool: authStack.todoUserPool,
+    //UserPoolClient: authStack.todoUserPoolClient,
+    putTodoFunction: lambdaStack.updateTodoFunc, // Assuming PutTodoFunction is correct
+    getTodoFunctions: lambdaStack.getTodoFuction, // Corrected and assuming GetTodoFunction is correct
+    updateTodoFunction: lambdaStack.updateTodoFunc, // Assuming UpdateTodoRESTFunction is the correct name
+    deleteTodoFunction: lambdaStack.deleteTodoFunc, // Assuming DeleteTodoFunction is correct
+  });
