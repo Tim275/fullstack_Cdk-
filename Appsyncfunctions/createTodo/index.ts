@@ -17,6 +17,7 @@ import {
 
   
   export const handler = async (event: AppSyncResolverEvent<any>) => {
+   
     console.log(JSON.stringify(event, null, 2));
     const { UserID, title } = event.arguments.input;
     const TodoID = ulid();

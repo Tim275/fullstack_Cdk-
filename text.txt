@@ -1,0 +1,2 @@
+REST_URL=https://5y865gnt5j.execute-api.eu-central-1.amazonaws.com/prod/
+GITHUB_TOKEN= 
