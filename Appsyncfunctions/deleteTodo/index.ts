@@ -3,12 +3,16 @@ import {
     DeleteItemCommandInput,
     DynamoDBClient,
     QueryCommand,
-  } from "@aws-sdk/client-dynamodb";
+  } 
+  
+  from "@aws-sdk/client-dynamodb";
   import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
   import { AppSyncIdentityCognito, AppSyncResolverEvent } from "aws-lambda";
   const client = new DynamoDBClient({ region: "eu-central-1" });
   const TABLE_NAME = "Todos";
   
+
+
   export const handler = async (
     event: AppSyncResolverEvent<any>
   ): Promise<boolean> => {

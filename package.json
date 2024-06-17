@@ -11,7 +11,7 @@
     "cdk": "cdk",
     "deploy": "cdk synth && cdk deploy --all",
     "signup": " jest --verbose ./__tests__/test_cases/e2e/confirm-user-sign-sup.test.ts",
-    "graphql": " jest --verbose ./__tests__/test_cases/e2e/appsync-todo-operation.test.ts",
+     "graphlambda": "jest --verbose ./__tests__/test_cases/e2e/cdk-cicd.test.ts",
     "alltests": "jest --verbose ./__tests__/test_cases/e2e/"
   },
   "devDependencies": {

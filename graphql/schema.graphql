@@ -1,4 +1,4 @@
-# Definiert einen Benutzertyp mit einer ID, einem Namen und einer E-Mail. 
+# Definiert einen Benutzertyp mit einer ID, einem Namen und einer E-Mail.
 type User {
   id: ID!
   name: String!
@@ -31,14 +31,14 @@ input DeleteTodoInput {
   title: String!
 }
 
-# Mutationstyp, der Operationen zum Erstellen, Aktualisieren und Löschen von Todos definiert.
+# Mutatiom: erstellen, aktualisieren und löschen von daten
 type Mutation {
   createTodo(input: CreateTodoInput!): Todo
   updateTodo(input: UpdateTodoInput!): Boolean
   deleteTodo(input: DeleteTodoInput!): Boolean
 }
 
-# Abfragetyp für das Auflisten von Todos nach einer spezifischen UserID.
+# Query: abrufen von daten
 type Query {
   listTodos(UserID: ID!): [Todo]
 }
