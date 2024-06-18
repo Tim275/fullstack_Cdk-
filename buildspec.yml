@@ -1,26 +1,31 @@
-commands:
-  # Login to Amazon ECR
-  - echo Logging in to Amazon ECR...
-  - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/o5v4t0u3
-  
-  # Build and tag the Docker image in one step
-  - echo Building and tagging the Docker image...
-  - docker build -t cdkstack:latest -t public.ecr.aws/o5v4t0u3/cdkstack:latest .
+version: 0.2
 
-build:
-  commands:
-    # Push the Docker image to ECR
-    - echo Pushing the Docker image...
-    - docker push public.ecr.aws/o5v4t0u3/cdkstack:latest
+phases:
+  install:
+    commands:
+      # Install dependencies
+      - echo Installing dependencies...
+      - npm install
 
-post_build:
-  commands:
-    # Deploy the application using the Docker image
-    - echo Deploying application from Docker...
-    - docker run --rm public.ecr.aws/o5v4t0u3/cdkstack:latest npx cdk deploy --require-approval never
+  pre_build:
+    commands:
+      # Synthesize CloudFormation templates from the CDK app
+      - echo Synthesizing the CDK app...
+      - npx cdk synth
+
+  build:
+    commands:
+      # Run all tests
+      - echo Running all tests...
+      - npm run alltests
+
+  post_build:
+    commands:
+      # Deploy the application using CDK
+      - echo Deploying the application...
+      - npx cdk deploy --all
 
 artifacts:
   files:
-    # Ensure the cdk.out directory exists and specify it for artifacts
-    - mkdir -p cdk.out
+    # Specify files or directories to include as build artifacts
     - cdk.out/**
