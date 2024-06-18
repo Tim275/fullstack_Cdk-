@@ -2,45 +2,44 @@ version: 0.2
 
 phases:
   install:
-    version: 0.2
-    
-    phases:
-      install:
-        commands:
-          - echo Installing NVM...
-          - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-          - export NVM_DIR="$HOME/.nvm"
-          - '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'  # This loads nvm
-          - nvm install node  # Install the latest version of Node.js
-          - nvm use node
-          - node --version  # Verify the Node.js version
-          - echo Installing AWS CLI...
-          - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-          - apt-get update -y --allow-releaseinfo-change || true  # Modified line to ignore errors
-          - apt-get install awscli -y
-          - echo "AWS CLI version:"
-          - aws --version
-          - echo Installing source NPM dependencies...
-          - npm install
-          - echo Installing AWS CDK globally...
-          - npm install -g aws-cdk
-          - echo "AWS CDK version:"
-          - cdk --version
-          - echo Authenticating with AWS...
-          - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-          - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+    commands:
+      - echo Installing AWS CLI...
+      - apt-get update -y
+      - apt-get install -y gnupg2
+      - echo Adding new Yarn GPG key...
+      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+      - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+      - echo Updating package lists...
+      - apt-get update -y
+      - echo Installing AWS CLI...
+      - apt-get install -y awscli
+      - echo "AWS CLI version:"
+      - aws --version
+      - echo Installing source NPM dependencies...
+      - npm install
+      - echo Installing AWS CDK globally...
+      - npm install -g aws-cdk
+      - echo "AWS CDK version:"
+      - cdk --version
+      - echo Authenticating with AWS...
+      - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+      - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+      - aws configure set region $AWS_REGION
+      - echo Bootstrapping AWS CDK...
+      - cdk bootstrap
   pre_build:
     commands:
       - echo Running pre-build steps...
   build:
     commands:
       - echo Synthesizing the CDK app...
-      - npx cdk synth
+      - cdk synth
       - echo Running unit tests...
       - npm run alltests
   post_build:
     commands:
       - echo Running post-build steps...
+
 artifacts:
   files:
     - '**/*'
