@@ -4,34 +4,28 @@ import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import { Construct } from "constructs";
-import path = require("path");
-import { join } from "path";
-import { Lambda } from "aws-cdk-lib/aws-ses-actions";
-
-
+import * as path from "path";
 
 interface LambdaStackProps extends cdk.StackProps {
   usersTable: Table;
   todosTable: Table;
- 
 }
 
 export class LambdaStack extends cdk.Stack {
-// cognito
+  // cognito
   public readonly addUserToTableFunc: NodejsFunction;
   // app sync functions
   public readonly createTodoFunc: NodejsFunction;
- public readonly listTodoFunc: NodejsFunction;
- public readonly deleteTodoFunc: NodejsFunction;
- public readonly updateTodoFunc: NodejsFunction;
+  public readonly listTodoFunc: NodejsFunction;
+  public readonly deleteTodoFunc: NodejsFunction;
+  public readonly updateTodoFunc: NodejsFunction;
 
- // ApiGateway Lambda Functions
- public readonly getTodoFuction: NodejsFunction;
- public readonly putTodoFunction: NodejsFunction;
- public readonly updateTodoRESTFunction: NodejsFunction;
- public readonly deleteTodoRESTFunction: NodejsFunction;
+  // ApiGateway Lambda Functions
+  public readonly getTodoFuction: NodejsFunction;
+  public readonly putTodoFunction: NodejsFunction;
+  public readonly updateTodoRESTFunction: NodejsFunction;
+  public readonly deleteTodoRESTFunction: NodejsFunction;
 
- 
   constructor(scope: Construct, id: string, props: LambdaStackProps) {
     super(scope, id, props);
     this.addUserToTableFunc = this.addUserToUsersTable(props);
@@ -45,9 +39,6 @@ export class LambdaStack extends cdk.Stack {
     this.putTodoFunction = this.PutTodoFunction(props);
     this.updateTodoRESTFunction = this.UpdateTodoFunction(props);
     this.deleteTodoRESTFunction = this.DeleteTodoFunction(props);
-
-
-
   }
 
   addUserToUsersTable(props: LambdaStackProps) {
@@ -55,7 +46,7 @@ export class LambdaStack extends cdk.Stack {
       functionName: "addUserFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.join(__dirname, "../../handlers/AddUserPostConfirmation/index.ts"),
+      entry: path.resolve(__dirname, "../../handlers/AddUserPostConfirmation/index.ts"),
     });
     func.addToRolePolicy(
       new iam.PolicyStatement({
@@ -71,7 +62,7 @@ export class LambdaStack extends cdk.Stack {
       functionName: "createTodoFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.join(__dirname, "../../AppsyncFunctions/createTodo/index.ts"),
+      entry: path.resolve(__dirname, "../../Appsyncfunctions/createTodo/index.ts"),
     });
     func.addToRolePolicy(
       new iam.PolicyStatement({
@@ -82,13 +73,12 @@ export class LambdaStack extends cdk.Stack {
     return func;
   }
 
-
   listTodoFunction(props: LambdaStackProps) {
     const func = new NodejsFunction(this, "listTodoFunc", {
       functionName: "listTodoFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.join(__dirname, "../../AppsyncFunctions/listTodos/index.ts"),
+      entry: path.resolve(__dirname, "../../Appsyncfunctions/listTodos/index.ts"),
     });
     func.addToRolePolicy(
       new iam.PolicyStatement({
@@ -104,7 +94,7 @@ export class LambdaStack extends cdk.Stack {
       functionName: "deleteTodoFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.join(__dirname, "../../AppsyncFunctions/deleteTodo/index.ts"),
+      entry: path.resolve(__dirname, "../../Appsyncfunctions/deleteTodo/index.ts"),
     });
     func.addToRolePolicy(
       new iam.PolicyStatement({
@@ -123,7 +113,7 @@ export class LambdaStack extends cdk.Stack {
       functionName: "updateTodoFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.join(__dirname, "../../AppsyncFunctions/updateTodo/index.ts"),
+      entry: path.resolve(__dirname, "../../Appsyncfunctions/updateTodo/index.ts"),
     });
     func.addToRolePolicy(
       new iam.PolicyStatement({
@@ -143,7 +133,7 @@ export class LambdaStack extends cdk.Stack {
       functionName: "GetTodosFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.join(__dirname, "../../APIGatewayFunctions/GetTodos/index.ts"),
+      entry: path.resolve(__dirname, "../../APIGatewayFunctions/GetTodos/index.ts"),
     });
     func.addToRolePolicy(
       new iam.PolicyStatement({
@@ -153,12 +143,13 @@ export class LambdaStack extends cdk.Stack {
     );
     return func;
   }
+
   PutTodoFunction(props: LambdaStackProps) {
     const func = new NodejsFunction(this, "PutTodoFunc", {
       functionName: "PutTodoFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.join(__dirname, "../../APIGatewayFunctions/PutTodo/index.ts"),
+      entry: path.resolve(__dirname, "../../APIGatewayFunctions/PutTodo/index.ts"),
     });
     func.addToRolePolicy(
       new iam.PolicyStatement({
@@ -168,12 +159,13 @@ export class LambdaStack extends cdk.Stack {
     );
     return func;
   }
+
   UpdateTodoFunction(props: LambdaStackProps) {
     const func = new NodejsFunction(this, "updateTodoRestFunc", {
       functionName: "updateTodoRestFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.join(__dirname, "../../APIGatewayFunctions/updateTodo/index.ts"),
+      entry: path.resolve(__dirname, "../../APIGatewayFunctions/updateTodo/index.ts"),
     });
 
     func.addToRolePolicy(
@@ -189,12 +181,13 @@ export class LambdaStack extends cdk.Stack {
 
     return func;
   }
+
   DeleteTodoFunction(props: LambdaStackProps) {
     const func = new NodejsFunction(this, "deleteTodoRestFunc", {
       functionName: "deleteTodoRestFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.join(__dirname, "../../AppsyncFunctions/deleteTodo/index.ts"),
+      entry: path.resolve(__dirname, "../../Appsyncfunctions/deleteTodo/index.ts"),
     });
 
     func.addToRolePolicy(
@@ -209,14 +202,5 @@ export class LambdaStack extends cdk.Stack {
     );
 
     return func;
-  }}
-
-
-
-
-
-
-
-
-
-
+  }
+}
