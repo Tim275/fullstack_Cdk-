@@ -71,7 +71,7 @@ export class LambdaStack extends cdk.Stack {
       functionName: "createTodoFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.join(__dirname, "../../Appsyncfunctions/createTodo/index.ts"),
+      entry: path.join(__dirname, "../../AppsyncFunctions/createTodo/index.ts"),
     });
     func.addToRolePolicy(
       new iam.PolicyStatement({
