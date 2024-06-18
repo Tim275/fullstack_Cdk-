@@ -6,6 +6,4 @@ node_modules
 # CDK asset staging directory
 .cdk.staging
 cdk.out
-APIGatewayFunctions
-infra/stacks/apigateway-stack.ts
 
