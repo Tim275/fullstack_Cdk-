@@ -2,13 +2,10 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      nodejs: 20.11.0 # Example: Specify a different Node.js version if 20.11.0 is not directly supported
     commands:
-      - >
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash &&
-        . ~/.nvm/nvm.sh &&
-        nvm install 20.11.0 &&
-        nvm use 20.11.0 &&
-        npm install
+      - npm install
   build:
     commands:
       - npm run build
