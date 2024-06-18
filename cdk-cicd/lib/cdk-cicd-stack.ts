@@ -1,55 +1,59 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { CodePipeline, CodePipelineSource, CodeBuildStep } from 'aws-cdk-lib/pipelines';
-import { LinuxBuildImage } from 'aws-cdk-lib/aws-codebuild';
-
-
+import * as codebuild from 'aws-cdk-lib/aws-codebuild';
+import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
+import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
 
 export class CdkCicdStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Source stage from GitHub
-    const source = CodePipelineSource.gitHub('Tim275/fullstack_Cdk-', 'main', {
-      authentication: cdk.SecretValue.secretsManager('github-token'),
+    // Existing CodeBuild project
+    const codeBuildProject = new codebuild.Project(this, 'MyProject', {
+      source: codebuild.Source.gitHub({
+        owner: 'Tim275',
+        repo: 'fullstack_Cdk-',
+        webhook: true,
+        webhookFilters: [
+          codebuild.FilterGroup.inEventOf(codebuild.EventAction.PUSH).andBranchIs('main'),
+        ],
+      }),
+      buildSpec: codebuild.BuildSpec.fromSourceFilename('buildspec.yml'),
     });
 
-   
-
-    // Build stage
-    const build = new CodeBuildStep('Build', {
-      input: source,
-      commands: [
-        'npm ci',
-        'npm install -g aws-cdk',
-        'npx cdk synth',
-        'npm run cdk deploy --all' // Corrected command to use npm run for cdk deploy
-      ],
-      buildEnvironment: {
-        buildImage: LinuxBuildImage.STANDARD_5_0,
-      },
+    // Create a new pipeline
+    const pipeline = new codepipeline.Pipeline(this, 'MyPipeline', {
+      pipelineName: 'MyPipeline',
+      crossAccountKeys: false, // Adjust based on your requirements
     });
 
-    // Define a ShellStep for running Jest tests
-    const jestTestStep = new CodeBuildStep('RunJestTests', {
-      input: source,
-      commands: [
-        'npm run alltests' // Jest test command
-      ],
-      buildEnvironment: {
-        buildImage: LinuxBuildImage.STANDARD_5_0,
-      },
+    // Add source stage to pipeline
+    const sourceOutput = new codepipeline.Artifact();
+    const sourceAction = new codepipeline_actions.GitHubSourceAction({
+      actionName: 'GitHub_Source',
+      owner: 'Tim275',
+      repo: 'fullstack_Cdk-',
+      oauthToken: cdk.SecretValue.secretsManager('github-token'), // Ensure this secret exists in Secrets Manager
+      output: sourceOutput,
+      branch: 'main', // Default is 'master'
+      trigger: codepipeline_actions.GitHubTrigger.WEBHOOK,
+    });
+    pipeline.addStage({
+      stageName: 'Source',
+      actions: [sourceAction],
+    });
+////
+    // Add build stage to pipeline
+    const buildAction = new codepipeline_actions.CodeBuildAction({
+      actionName: 'CodeBuild',
+      project: codeBuildProject,
+      input: sourceOutput, // Use the output from the source stage as input
+    });
+    pipeline.addStage({
+      stageName: 'Build',
+      actions: [buildAction],
     });
 
-
-
-
+    // Additional stages (e.g., Deploy) can be added here
   }
 }
-
-// Deploy the pipeline
-const app = new cdk.App();
-new CdkCicdStack(app, 'MyCdkPipelineStack', {
-  env: { account: '506820257931', region: 'eu-central-1' },
-});
-app.synth();
