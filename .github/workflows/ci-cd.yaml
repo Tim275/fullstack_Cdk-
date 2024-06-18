@@ -1,44 +1,32 @@
-name: CI/CD Workflow
+steps:
+  - uses: actions/checkout@v3
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  - name: Setup Node.js
+    uses: actions/setup-node@v3
+    with:
+      node-version: '20'
+      cache: 'npm'
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+  - name: Install AWS CLI
+    run: |
+      sudo apt-get update
+      sudo apt-get install awscli -y
 
-    steps:
-      - uses: actions/checkout@v3
+  - name: Install AWS CDK CLI
+    run: npm install -g aws-cdk
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-          cache: 'npm'
+  - name: Install dependencies
+    run: npm install
 
-      - name: Install AWS CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install awscli -y
+  - name: Synthesize the CDK app
+    run: npx cdk synth
+    working-directory: .
+    
+  - name: Run all tests
+    run: npm run alltests
 
-      - name: Install AWS CDK CLI
-        run: npm install -g aws-cdk
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Synthesize the CDK app
-        run: npx cdk synth
-
-      - name: Run all tests
-        run: npm run alltests
-
-      - name: Deploy all stacks
-        run: npx cdk deploy --all --require-approval never
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
+  - name: Deploy all stacks
+    run: npx cdk deploy --all --require-approval never
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
