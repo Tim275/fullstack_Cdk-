@@ -4,16 +4,22 @@ phases:
   install:
     commands:
       - echo Installing source NPM dependencies...
-      - npm ci
+      - npm install
+      - echo Installing AWS CDK globally...
+      - npm install -g aws-cdk
+      - echo Bootstrapping AWS CDK...
+      - cdk bootstrap
+      - echo Building CDK stacks...
+      - cdk synth
   pre_build:
     commands:
       - echo Running pre-build steps...
   build:
     commands:
       - echo Synthesizing the CDK app...
-      - npx cdk synth
+      - cdk synth
       - echo Running unit tests...
-      - npm test
+      - npm run alltests
 artifacts:
   files:
     - cdk-cicd/cdk.out/**
