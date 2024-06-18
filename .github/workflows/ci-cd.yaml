@@ -19,16 +19,13 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install AWS CLI
+      - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install awscli -y
+          npm install
+          npm install aws-cdk-lib ts-node
 
-      - name: Install AWS CDK CLI
-        run: npm install -g aws-cdk
-
-      - name: Bootstrap AWS CDK
-        run: npx cdk bootstrap
+      - name: Bootstrap AWS CDK in eu-central-1
+        run: npx cdk bootstrap aws://unknown-account/eu-central-1
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
