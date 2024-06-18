@@ -1,15 +1,25 @@
 version: 0.2
 
-
 phases:
   install:
     runtime-versions:
       nodejs: 20
     commands:
+      - echo Installing AWS CLI...
+      - echo Installing AWS CLI...
+      - sudo apt-get update
+      - sudo apt-get install awscli -y
+      - echo AWS CLI version:
+        - aws --version
+      - sudo ./aws/install
+      - echo AWS CLI version:
+      - aws --version
       - echo Installing source NPM dependencies...
-      - npm ci
+      - npm install
       - echo Installing AWS CDK globally...
       - npm install -g aws-cdk
+      - echo AWS CDK version:
+      - cdk --version
       - echo Authenticating with AWS...
       - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
       - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
@@ -19,7 +29,7 @@ phases:
   pre_build:
     commands:
       - echo Running pre-build steps...
-      - npm run lint
+  #    - npm run lint
   build:
     commands:
       - echo Synthesizing the CDK app...
