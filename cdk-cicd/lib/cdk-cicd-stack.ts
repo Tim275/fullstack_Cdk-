@@ -3,10 +3,21 @@ import { Construct } from 'constructs';
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
+import * as iam from 'aws-cdk-lib/aws-iam';
+
 
 export class CdkCicdStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+
+
+// Define an IAM role for CodeBuild
+const codeBuildRole = new iam.Role(this, 'CodeBuildRole', {
+  assumedBy: new iam.ServicePrincipal('codebuild.amazonaws.com'),
+  // Define permissions here or attach existing policies
+});
+
+
 
     // Existing CodeBuild project
     const codeBuildProject = new codebuild.Project(this, 'MyProject', {

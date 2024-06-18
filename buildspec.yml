@@ -3,44 +3,18 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo Installing AWS CLI...
-      - apt-get update -y
-      - apt-get install -y gnupg2
-      - echo Adding new Yarn GPG key...
-      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-      - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-      - echo Updating package lists...
-      - apt-get update -y
-      - echo Installing AWS CLI...
-      - apt-get install -y awscli
-      - echo "AWS CLI version:"
-      - aws --version
-      - echo Installing source NPM dependencies...
       - npm install
-      - echo Installing AWS CDK globally...
-      - npm install -g aws-cdk
-      - echo "AWS CDK version:"
-      - cdk --version
-      - echo Authenticating with AWS...
-      - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-      - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-      - aws configure set region $AWS_REGION
-      - echo Bootstrapping AWS CDK...
-      - cdk bootstrap
   pre_build:
     commands:
-      - echo Running pre-build steps...
+      - npm run build
   build:
     commands:
-      - echo Synthesizing the CDK app...
-      - cdk synth
-      - echo Running unit tests...
-      - npm run alltests
+      - npx cdk synth
   post_build:
     commands:
-      - echo Running post-build steps...
+      - npx cdk deploy --all --require-approval never
 
 artifacts:
   files:
-    - '**/*'
+    - cdk.out/**
   base-directory: cdk.out
