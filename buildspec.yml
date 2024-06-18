@@ -2,10 +2,9 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      nodejs: 18
     commands:
-      # Ensure using the latest Node.js version (18)
-      - nvm install 18
-      - nvm use 18
       # Install dependencies
       - echo Installing dependencies...
       - npm install
