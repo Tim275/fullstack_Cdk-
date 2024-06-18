@@ -113,7 +113,7 @@ export class LambdaStack extends cdk.Stack {
       functionName: "updateTodoFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.resolve(__dirname, "../../Appsyncfunctions/updateTodo/index.ts"),
+      entry: path.resolve(__dirname, "../../Appsyncfunctions/UpdateTodo/index.ts"),
     });
     func.addToRolePolicy(
       new iam.PolicyStatement({
@@ -165,7 +165,7 @@ export class LambdaStack extends cdk.Stack {
       functionName: "updateTodoRestFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.resolve(__dirname, "../../APIGatewayFunctions/updateTodo/index.ts"),
+      entry: path.resolve(__dirname, "../../APIGatewayFunctions/UpdateTodo/index.ts"),
     });
 
     func.addToRolePolicy(
