@@ -5,9 +5,11 @@ phases:
     runtime-versions:
       nodejs: 16
     commands:
+      - node --version
+      - npm --version
       - echo Installing dependencies...
       - npm install
-
+      
   pre_build:
     commands:
       - echo Synthesizing the CDK app...
