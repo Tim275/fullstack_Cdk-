@@ -35,7 +35,7 @@ phases:
   build:
     commands:
       - echo Synthesizing the CDK app...
-      - cdk synth
+      - npx cdk synth
       - echo Running unit tests...
       - npm run alltests
   post_build:
