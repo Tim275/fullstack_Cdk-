@@ -2,17 +2,23 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      nodejs: 14
     commands:
       - npm install
   pre_build:
     commands:
-      - npm run build
+      - npm run build # Uncommented and assuming this script is configured in your package.json
   build:
     commands:
       - npx cdk synth
   post_build:
     commands:
       - npx cdk deploy --all --require-approval never
+
+cache:
+  paths:
+    - 'node_modules/**/*'
 
 artifacts:
   files:
