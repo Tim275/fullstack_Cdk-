@@ -6,8 +6,8 @@ phases:
       nodejs: 20
     commands:
       - echo Installing AWS CLI...
-      - sudo apt-get update
-      - sudo apt-get install awscli -y
+      - apt-get update # Removed sudo
+      - apt-get install awscli -y # Removed sudo
       - echo "AWS CLI version:"
       - aws --version
       - echo Installing source NPM dependencies...
