@@ -3,6 +3,8 @@ version: 0.2
 phases:
   install:
     commands:
+      - nvm install node # Installs the latest version of Node.js
+      - nvm use node
       - npm install
   build:
     commands:
