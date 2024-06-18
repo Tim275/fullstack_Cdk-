@@ -1,15 +1,26 @@
-version: 0.2
+commands:
+  # Login to Amazon ECR
+  - echo Logging in to Amazon ECR...
+  - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/o5v4t0u3
+  
+  # Build and tag the Docker image in one step
+  - echo Building and tagging the Docker image...
+  - docker build -t cdkstack:latest -t public.ecr.aws/o5v4t0u3/cdkstack:latest .
 
-phases:
-  install:
-    runtime-versions:
-      nodejs: 20.11.0 # Example: Specify a different Node.js version if 20.11.0 is not directly supported
-    commands:
-      - npm install
-  build:
-    commands:
-      - npm run build
-      - cdk synth
-  post_build:
-    commands:
-      - cdk deploy --require-approval never
+build:
+  commands:
+    # Push the Docker image to ECR
+    - echo Pushing the Docker image...
+    - docker push public.ecr.aws/o5v4t0u3/cdkstack:latest
+
+post_build:
+  commands:
+    # Deploy the application using the Docker image
+    - echo Deploying application from Docker...
+    - docker run --rm public.ecr.aws/o5v4t0u3/cdkstack:latest npx cdk deploy --require-approval never
+
+artifacts:
+  files:
+    # Ensure the cdk.out directory exists and specify it for artifacts
+    - mkdir -p cdk.out
+    - cdk.out/**
