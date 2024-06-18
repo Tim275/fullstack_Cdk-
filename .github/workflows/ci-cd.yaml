@@ -27,6 +27,12 @@ jobs:
       - name: Install AWS CDK CLI
         run: npm install -g aws-cdk
 
+      - name: Print current directory
+        run: pwd
+
+      - name: List files in the repository
+        run: ls -R
+
       - name: Install dependencies
         run: npm install
 
