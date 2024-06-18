@@ -3,12 +3,12 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 14
+      nodejs: 18
     commands:
       - npm install
   pre_build:
     commands:
-      - npm run build # Uncommented and assuming this script is configured in your package.json
+      - npm run build
   build:
     commands:
       - npx cdk synth
