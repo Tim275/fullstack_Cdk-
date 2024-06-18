@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing Node.js and NPM...
+      - sudo apt update -y && sudo apt install nodejs npm -y
+  pre_build:
+    commands:
+      - echo Checking out code...
+      - echo Configuring AWS credentials...
+      - |
+        aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+        aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+        aws configure set default.region eu-central-1
+  build:
+    commands:
+      - echo Installing dependencies...
+      - npm install
+      - echo Running CDK Synth...
+      - cdk synth --app "npx ts-node bin/cdk-app.ts"
+      - echo Deploying with CDK...
+      - cdk deploy --require-approval never
+    finally:
+      - echo Build and deploy steps completed.
+artifacts:
+  files:
+    - CDK-AWS/cdk.out/**
