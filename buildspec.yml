@@ -1,33 +1,27 @@
 version: 0.2
 
+
+
 phases:
   install:
-    runtime-versions:
-      nodejs: 20
-    phases:
-      install:
-        runtime-versions:
-          nodejs: 20
-        commands:
-          - echo Installing AWS CLI...
-          - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - # Update Yarn GPG key without sudo
-          - echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list # Use the new sbt repo
-          - apt-get update
-          - apt-get install awscli -y
-          - echo "AWS CLI version:"
-          - aws --version
-          - echo Installing source NPM dependencies...
-          - npm install
-          - echo Installing AWS CDK globally...
-          - npm install -g aws-cdk
-          - echo "AWS CDK version:"
-          - cdk --version
-          - echo Authenticating with AWS...
-          - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-          - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-          - aws configure set region $AWS_REGION
-          - echo Bootstrapping AWS CDK...
-          - cdk bootstrap
+    commands:
+      - echo Installing AWS CLI...
+      - apt-get update -y
+      - apt-get install awscli -y
+      - echo "AWS CLI version:"
+      - aws --version
+      - echo Installing source NPM dependencies...
+      - npm install
+      - echo Installing AWS CDK globally...
+      - npm install -g aws-cdk
+      - echo "AWS CDK version:"
+      - cdk --version
+      - echo Authenticating with AWS...
+      - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+      - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+      - aws configure set region $AWS_REGION
+      - echo Bootstrapping AWS CDK...
+      - cdk bootstrap
   pre_build:
     commands:
       - echo Running pre-build steps...
