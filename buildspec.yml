@@ -1,26 +1,35 @@
 version: 0.2
 
+
 phases:
   install:
+    runtime-versions:
+      nodejs: 20
     commands:
       - echo Installing source NPM dependencies...
-      - npm install
+      - npm ci
       - echo Installing AWS CDK globally...
       - npm install -g aws-cdk
+      - echo Authenticating with AWS...
+      - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+      - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+      - aws configure set region $AWS_REGION
       - echo Bootstrapping AWS CDK...
       - cdk bootstrap
-      - echo Building CDK stacks...
-      - cdk synth
   pre_build:
     commands:
       - echo Running pre-build steps...
+      - npm run lint
   build:
     commands:
       - echo Synthesizing the CDK app...
       - cdk synth
       - echo Running unit tests...
       - npm run alltests
+  post_build:
+    commands:
+      - echo Running post-build steps...
 artifacts:
   files:
-    - cdk-cicd/cdk.out/**
-  base-directory: .
+    - '**/*'
+  base-directory: cdk.out
