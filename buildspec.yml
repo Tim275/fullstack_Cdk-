@@ -1,13 +1,13 @@
+version: 0.2
 
- version: 0.2
- phases:
- install:
- commands:
- - npm install
- build:
- commands:
- - npm run build
- - cdk synth
- post_build:
- commands:
- - cdk deploy - require-approval never
+phases:
+  install:
+    commands:
+      - npm install
+  build:
+    commands:
+      - npm run build
+      - cdk synth
+  post_build:
+    commands:
+      - cdk deploy --require-approval never
