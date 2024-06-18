@@ -62,7 +62,7 @@ export class LambdaStack extends cdk.Stack {
       functionName: "createTodoFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.resolve(__dirname, "../../AppsyncFunctions/createTodo/index.ts"),
+      entry: path.resolve(__dirname, "../../Appsyncfunctions/createTodo/index.ts"),
     });
     func.addToRolePolicy(
       new iam.PolicyStatement({
@@ -78,7 +78,7 @@ export class LambdaStack extends cdk.Stack {
       functionName: "listTodoFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.resolve(__dirname, "../../AppsyncFunctions/listTodos/index.ts"),
+      entry: path.resolve(__dirname, "../../Appsyncfunctions/listTodos/index.ts"),
     });
     func.addToRolePolicy(
       new iam.PolicyStatement({
@@ -94,7 +94,7 @@ export class LambdaStack extends cdk.Stack {
       functionName: "deleteTodoFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.resolve(__dirname, "../../AppsyncFunctions/deleteTodo/index.ts"),
+      entry: path.resolve(__dirname, "../../Appsyncfunctions/deleteTodo/index.ts"),
     });
     func.addToRolePolicy(
       new iam.PolicyStatement({
@@ -113,7 +113,7 @@ export class LambdaStack extends cdk.Stack {
       functionName: "updateTodoFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.resolve(__dirname, "../../AppsyncFunctions/updateTodo/index.ts"),
+      entry: path.resolve(__dirname, "../../Appsyncfunctions/updateTodo/index.ts"),
     });
     func.addToRolePolicy(
       new iam.PolicyStatement({
