@@ -11,7 +11,7 @@
     "cdk": "cdk",
     "deploy": "cdk synth && cdk deploy --all",
     "signup": " jest --verbose ./__tests__/test_cases/e2e/confirm-user-sign-sup.test.ts",
-     "graphlambda": "jest --verbose ./__tests__/test_cases/e2e/cdk-cicd.test.ts",
+    "graphlambda": "jest --verbose ./__tests__/test_cases/e2e/cdk-cicd.test.ts",
     "alltests": "jest --verbose ./__tests__/test_cases/e2e/"
   },
   "devDependencies": {
@@ -29,7 +29,7 @@
     "@aws-sdk/client-dynamodb": "^3.523.0",
     "@aws-sdk/util-dynamodb": "^3.523.0",
     "@types/chance": "^1.1.6",
-    "aws-cdk-lib": "^2.128.0",
+    "aws-cdk-lib": "^2.146.0",
     "aws-lambda": "^1.0.7",
     "axios": "^1.7.2",
     "chance": "^1.1.11",
