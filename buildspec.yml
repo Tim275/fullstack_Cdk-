@@ -3,17 +3,22 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 18
+      nodejs: 14
     commands:
+      - echo "Installing dependencies"
+      - "node -v"
       - npm install
   pre_build:
     commands:
+      - echo "Running pre-build commands"
       - npm run build
   build:
     commands:
+      - echo "Running build commands"
       - npx cdk synth
   post_build:
     commands:
+      - echo "Running post-build commands"
       - npx cdk deploy --all --require-approval never
 
 cache:
@@ -24,3 +29,9 @@ artifacts:
   files:
     - cdk.out/**
   base-directory: cdk.out
+
+env:
+  variables:
+    NODE_OPTIONS: '--max-old-space-size=4096' # Optional: increase memory limit for Node.js
+
+image: 'aws/codebuild/standard:5.0' # Updated image to ensure Node.js 14+
