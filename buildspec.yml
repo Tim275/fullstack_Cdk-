@@ -1,13 +1,15 @@
 version: 0.2
 
+
+
 phases:
   install:
     runtime-versions:
       nodejs: 20
     commands:
       - echo Installing AWS CLI...
-      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - # Update Yarn GPG key
-      - sudo add-apt-repository "deb https://dl.bintray.com/sbt/debian /" # Optional: Adjust if there's a new sbt repo
+      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - # Update Yarn GPG key without sudo
+      - add-apt-repository "deb https://dl.bintray.com/sbt/debian /" # Adjust if there's a new sbt repo, without sudo
       - apt-get update
       - apt-get install awscli -y
       - echo "AWS CLI version:"
