@@ -1,25 +1,23 @@
-install:
-  runtime-versions:
-    nodejs: 18
-  commands:
-    # Install dependencies including local AWS CDK
-    - echo Installing dependencies...
-    - npm install
+version: 0.2
 
-pre_build:
-  commands:
-    # Synthesize CloudFormation templates from the CDK app using the local version
-    - echo Synthesizing the CDK app...
-    - ./node_modules/.bin/cdk synth
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo Installing dependencies...
+      - npm install
 
-build:
-  commands:
-    # Run all tests
-    - echo Running all tests...
-    - npm run alltests
-    # Synthesize CloudFormation templates again (optional, if your tests don't modify the infrastructure)
-    - echo Synthesizing the CDK app again...
-    - ./node_modules/.bin/cdk synth
-    # Deploy all stacks to AWS
-    - echo Deploying all stacks...
-    - ./node_modules/.bin/cdk deploy --all --require-approval never
+  pre_build:
+    commands:
+      - echo Synthesizing the CDK app...
+      - npx cdk synth
+
+  build:
+    commands:
+      - echo Running all tests...
+      - npm run alltests
+      - echo Synthesizing the CDK app again...
+      - npx cdk synth
+      - echo Deploying all stacks...
+      - npx cdk deploy --all --require-approval never
