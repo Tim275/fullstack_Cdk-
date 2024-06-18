@@ -187,7 +187,7 @@ export class LambdaStack extends cdk.Stack {
       functionName: "deleteTodoRestFunc",
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
-      entry: path.resolve(__dirname, "../../AppsyncFunctions/deleteTodo/index.ts"),
+      entry: path.resolve(__dirname, "../../Appsyncfunctions/deleteTodo/index.ts"),
     });
 
     func.addToRolePolicy(
