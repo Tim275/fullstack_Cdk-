@@ -5,7 +5,7 @@ phases:
     commands:
       - echo Installing AWS CLI...
       - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-      - apt-get update -y
+      - apt-get update -y --allow-releaseinfo-change || true  # Modified line to ignore errors
       - apt-get install awscli -y
       - echo "AWS CLI version:"
       - aws --version
