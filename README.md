@@ -1,6 +1,7 @@
 # Welcome to your CDK TypeScript project
 
-![alt text](FullstackCDKhell.png)
+![image](https://github.com/Tim275/fullstack_Cdk-/assets/117520669/b8fc4842-a915-4082-9b8b-474a500ece70)
+
 
 ## Useful commands
 
