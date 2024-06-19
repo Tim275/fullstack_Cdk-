@@ -1,6 +1,6 @@
 # Welcome to your CDK TypeScript project
 
-![image](https://github.com/Tim275/fullstack_Cdk-/assets/117520669/b8fc4842-a915-4082-9b8b-474a500ece70)
+![image](https://github.com/Tim275/fullstack_Cdk-/assets/117520669/6a051975-667a-4e75-aa8e-0b6c560fdc9c)
 
 
 ## Useful commands
