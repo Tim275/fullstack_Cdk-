@@ -3,23 +3,23 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 16
+      nodejs: 20
     commands:
-      - node --version
-      - npm --version
-      - echo Installing dependencies...
+      - npm install -g aws-cdk
       - npm install
-      
   pre_build:
     commands:
       - echo Synthesizing the CDK app...
       - npx cdk synth
-
   build:
     commands:
       - echo Running all tests...
       - npm run alltests
-      - echo Synthesizing the CDK app again...
-      - npx cdk synth
+  post_build:
+    commands:
       - echo Deploying all stacks...
       - npx cdk deploy --all --require-approval never
+
+artifacts:
+  files:
+    - '**/*'
