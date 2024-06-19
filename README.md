@@ -1,5 +1,9 @@
 # Welcome to your CDK TypeScript project
 
+
+based on that old thing :): https://github.com/Tim275/serverless-todo-backend
+
+
 ![alt text](image.png)
 
 ## Useful commands
