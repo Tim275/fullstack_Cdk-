@@ -12,7 +12,7 @@
     "deploy": "cdk synth && cdk deploy --all",
     "signup": " jest --verbose ./__tests__/test_cases/e2e/confirm-user-sign-sup.test.ts",
     "graphlambda": "jest --verbose ./__tests__/test_cases/e2e/cdk-cicd.test.ts",
-    "alltests": "jest --verbose ./__tests__/test_cases/e2e/"
+    "alltests": "jest --verbose ./__tests__/test_cases/e2e/ --testPathIgnorePatterns=confirm-user-sign-sup.test.ts"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.134",
